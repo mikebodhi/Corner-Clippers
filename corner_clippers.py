@@ -104,6 +104,7 @@ def primary_cut(frame, pulses):
     
     geometry = load_geometry()
     outer_keys, geo_keys, dom_pos = get_dom_info(geometry)
+    #loads in trained random forest
     ranfor = joblib.load('trained_corner_clippers_final.joblib')
     #gets the values of the 4 features and then predicts based on them
     CoG_r, ratio, CoG_z, total_charge = get_vals(frame,pulses, outer_keys, geo_keys, dom_pos)
@@ -122,59 +123,29 @@ def primary_cut(frame, pulses):
         
     return True
 
+#takes *.i3 files from the command line and will search all of the events in every file for corner clippers.
+#Will then create ONE file 'no_cornerclippers.i3.gz' that adds a 'isclip' tag that is filterable in steamshovel and has a true/false value.
 def main():
 
     input_files = []
-    merge = False
 
     for i, arg in enumerate(sys.argv):
         
         if i == 0:
             continue
-
-        if arg.lower() == "-merge":
-            merge = True
-            
         else:
             input_files.append(arg)
 
     tray = I3Tray()
-    
-    if merge:
-        
-        for i in input_files:
-            
-            #removes .i3.bz2 from filename
-            newfile = i[:-7]
-
-            newfile = newfile+"_no_cc.i3.bz2"
-            tray.Add('I3Reader', filename=i)
-            tray.Add(primary_cut, pulses='SRTHVInIcePulses') 
-            tray.Add('I3Writer', 'EventWriter',
-                               filename=newfile,
-                               Streams=[icetray.I3Frame.TrayInfo,
-                                        icetray.I3Frame.DAQ,
-                                        icetray.I3Frame.Physics,
-                                        icetray.I3Frame.Stream('S')],
-                               DropOrphanStreams=[icetray.I3Frame.DAQ],
-                               )
-            
-        print("The new files have been created with the same filenames but with no_cc added on to the end of the name.")
-        
-    else:
-        tray.Add('I3Reader', FilenameList=input_files)
-        tray.Add(primary_cut, pulses='SRTHVInIcePulses') 
-        tray.Add('I3Writer', 'EventWriter',
-                           FileName='no_cornerclippers.i3.gz',
-                           Streams=[icetray.I3Frame.TrayInfo,
-                                    icetray.I3Frame.DAQ,
-                                    icetray.I3Frame.Physics,
-                                    icetray.I3Frame.Stream('S')],
-                           DropOrphanStreams=[icetray.I3Frame.DAQ],
-
-                           )
-	
-    print('A new file named no_cornerclippers.i3.gz has been created with labels for the events in all .i3.bz2 files in this directory')
+    tray.Add('I3Reader', FilenameList=input_files)
+    tray.Add(primary_cut, pulses='SRTHVInIcePulses') 
+    tray.Add('I3Writer', 'EventWriter',
+	FileName='no_cornerclippers.i3.gz',
+        Streams=[icetray.I3Frame.TrayInfo,
+        icetray.I3Frame.DAQ,
+        icetray.I3Frame.Physics,
+        icetray.I3Frame.Stream('S')],
+        DropOrphanStreams=[icetray.I3Frame.DAQ], )
     tray.AddModule('TrashCan','can')
     tray.Execute()
     tray.Finish()
