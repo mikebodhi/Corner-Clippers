@@ -9,6 +9,7 @@ directory that contains the .i3 file(s) that you want to identify corner clipper
 which can be used to filter out corner-clippers event from view and/or analysis.
 
 INTENDED USE:
+
 While multiple .i3 files can be used as input for the script, it is intended that only 1 file be used as input per 1 call to corner_clippers.py. This is because the new file that
 is created will be named no_cc_YOUR_FILENAME1.i3 where YOUR_FILENAME1 is the name of the first input file passed as an argument, so you must remember which other files you passed
 as arguments so that you do not pass them as arguments again later. In addition, all frames from all files are combined into the 1 output file with no distinction between which
@@ -17,11 +18,17 @@ where you want to identify corner clippers in all .i3 files in a directory but w
 that loops through all .i3 files in the CWD and will create new, identifiable .i3 files for each unique file in the directory.
 
 VERSIONS OF EVERYTHING THAT I HAD:
+
 Python: 3.7.5
+
 joblib :1.0.1
+
 numpy: 1.21.1
+
 pandas: 1.3.1
+
 scikit-learn: 0.24.1
+
 scipy: 1.7.1
 
 ^not sure if these are exact requirements, i.e having python 3.7.0 instead of 3.7.5 may not break corner_clippers.py, but just in case anything does go wrong I figured I should
