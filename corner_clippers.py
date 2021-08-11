@@ -130,17 +130,17 @@ def main():
     input_files = []
 
     for i, arg in enumerate(sys.argv):
-        
+        print(i, arg)
         if i == 0:
             continue
         else:
             input_files.append(arg)
-
+	
     tray = I3Tray()
     tray.Add('I3Reader', FilenameList=input_files)
     tray.Add(primary_cut, pulses='SRTHVInIcePulses') 
     tray.Add('I3Writer', 'EventWriter',
-	FileName='no_cornerclippers.i3.gz',
+	FileName='no_cc_'+input_files[0],
         Streams=[icetray.I3Frame.TrayInfo,
         icetray.I3Frame.DAQ,
         icetray.I3Frame.Physics,
