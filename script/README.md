@@ -17,6 +17,12 @@ frames belonged to which file, so that is why calling corner_clippers.py is inte
 where you want to identify corner clippers in all .i3 files in a directory but want them to remain distinct, so corner_clippers.py can be called inside a loop in a bash script
 that loops through all .i3 files in the CWD and will create new, identifiable .i3 files for each unique file in the directory.
 
+THINGS TO CHANGE:
+
+If you would like to use a different GeoCalibDetectorStatus file than the one given in the directory, you can change it to yours in the code since I hard-coded mine in. I did not
+know there were different GCDS files that people may like to use, and I am heading to South Korea in a few hours so I ran out of time to test&debug any code that would allow
+for a GCDS file to be passed as a command line argument, plus I am not that good at it to be honest. Sorry for the inconvenience :(
+
 VERSIONS OF EVERYTHING THAT I HAD:
 
 Python: 3.7.5
